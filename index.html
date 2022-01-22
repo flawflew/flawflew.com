@@ -115,7 +115,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -145,6 +145,163 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://flawflew.com/2022/01/23/%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%9C%80%E6%B1%82%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Geralt">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Flaw Flew">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/01/23/%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%9C%80%E6%B1%82%E5%BC%80%E5%8F%91%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">第一个需求开发总结</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-01-23 03:11:45 / 修改时间：03:37:05" itemprop="dateCreated datePublished" datetime="2022-01-23T03:11:45+08:00">2022-01-23</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>第三周开始着手简单的API开发，只有简单的单表读写，也不涉及其他服务。本以为挺简单的（Controller-&gt;Service-&gt;Repository），结果花了一周都没搞定。</p>
+<p>主要是还在模仿大家写的代码，这个过程中在设计的初衷，风格的选择上花了些时间。因为不了解促使这些组件或者设计方法产生的原因，会有：这么”做会不会是多此一举“，”会不会把问题复杂化了“等疑问。</p>
+<p>##主要的问题：<br>####代码主要是模仿为主，缺少了思考，面对多个已有的编码风格时，就不知所措了</p>
+<p>比如在Controller中去捕获异常是没有必要的，其实在com.xxx.xxx.xxx.configuration.WebMvcConfigurer中已经配置了统一异常解析器。当然这是后来Mentor告知的</p>
+<p>####在代码设计上缺少经验</p>
+<p>涉及到对象转换时，convert有必要用静态方法吗？convertTo还是convertFrom？Objects.nonNull 还是 obj != null？……</p>
+<p>会忽略掉潜在的NPE，意识不够</p>
+<p>####定位解决问题很慢，很着急</p>
+<p>主要原因还是对组件和工具不了解</p>
+<p>##主要学习内容<br>####项目流程<br>PM提出需求，需求评审，主R制定技术方案，技术方案评审，开发，联调，测试，上线。</p>
+<p>上述只是一个大致的流程，其中每个环节都还包含许多细节。</p>
+<p>需求评审：由PM调研后提出需求，主要包含需求的背景，调研的数据，期望的结果，以及一些具体细节</p>
+<p>技术方案：由主R根据需求评审结果，制定出一个符合实际的可行方案，主要是使用UML描述核心技术细节：用例图，主要流程的时序图，API的初步定义……</p>
+<p>开发：参照技术方案，按照公司的开发规范具体实现。这里面研发有一定的自由度，但应该在整体上和团队编码风格和规范保持一致。与之并行的还有单元测试：在每完成一个小功能点时，应当进行测试验证，如果有上下游依赖可以模拟数据。</p>
+<p>联调：研发联系上下游的其他研发人员，共同测试整个链路的功能。遇到问题，共同协商解决。</p>
+<p>测试：完成联调后，在xxx上提测交付QA，由QA进行测试，这个过程中RD应尽力配合QA，时刻跟进解决发现的问题</p>
+<p>统一交付平台存在的意义：假如没有这个交付系统，就需要QA自行拉取代码，自行配置环境并构建后再测试。所以意义就是：使QA专注于测试，无需了解具体实现细节（个人理解）</p>
+<p>上线：在此之前，在仓库中创建release分支，项目进入staging阶段，将项目部署在线上环境，进行内部测试（类似于alpha测试吧），尽量模拟实际使用场景。之后进入prod阶段，即发布上线</p>
+<p>上线后应当检查：服务是否正常启动，端口是否正常，异常日志（使用跳板机登陆主机查看日志，或者在xxx上查看），<strong>还应当留意上下游是否出现异常</strong></p>
+<p>####研发流程<br>首先，应当通过仔细的阅读需求文档，了解需求的背景和细节，针对疑问在需求评审中提出讨论，理解需求。</p>
+<p>结合技术文档，分析是否满足需求，以及可行性。可以对技术文档做出优化。</p>
+<p>在实际开发前，最好设计出关键数据的类图，关键流程的时序图。</p>
+<p>开发内容主要分两个：</p>
+<p>rpc服务</p>
+<p>公司使用的是Thrift，首先根据上游业务需要，设计出服务接口。然后依照开发规范，实现接口。开发接口时，需要严格遵守API文档规范。在这次开发中遇到的</p>
+<p>http服务</p>
+<p>根据技术文档中的API定义，依照开发规范设计接口。</p>
+<p>其中服务注册和发现，路由，监控等基础的公共服务也是后端比较重要的内容，但是这些我感觉在开发过程中是完全透明的，只需要专注于写业务代码即可。</p>
+<p>##组件使用<br>xxx微服务框架，类似Dubbo</p>
+<p>xxx配置中心，类似Netflix配置中心</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://flawflew.com/2021/12/16/Windows-Terminal-%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Geralt">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Flaw Flew">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/12/16/Windows-Terminal-%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">Windows Terminal 简单配置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-12-16 21:30:02" itemprop="dateCreated datePublished" datetime="2021-12-16T21:30:02+08:00">2021-12-16</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -380,7 +537,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
